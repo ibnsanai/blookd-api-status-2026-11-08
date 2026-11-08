@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Blookd API — Status and Microservices Readiness</title>
+  <style>
+    :root{--ink:#172033;--muted:#5d687b;--line:#dce2ec;--accent:#3157c8;--ok:#14734b;--warn:#9a5b00;--bad:#b42332}*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:var(--ink);font:14px/1.42 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}main{width:min(1050px,calc(100% - 30px));margin:20px auto}section{background:#fff;border:1px solid var(--line);border-radius:11px;padding:17px 20px;margin-bottom:12px}h1{font-size:24px;margin:0 0 5px}h2{font-size:18px;margin:0 0 8px}h3{font-size:15px;margin:10px 0 5px}p,ul{margin:5px 0}ul{padding-left:20px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:9px 0}.metric{border:1px solid var(--line);border-radius:7px;padding:8px}.metric strong{display:block;font-size:19px}.metric span{font-size:10px;color:var(--muted)}.tag{display:inline-block;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700}.ok{color:var(--ok);background:#e8f6ef}.warn{color:var(--warn);background:#fff4db}.bad{color:var(--bad);background:#ffeaed}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.callout{border-left:3px solid var(--accent);background:#f3f6ff;padding:8px 10px;margin:8px 0}.pagebreak{break-before:page}@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}@media print{body{background:#fff}main{width:100%;margin:0}section{border:0;border-radius:0;padding:10px 14px;margin-bottom:4px}.pagebreak{break-before:page}}
+  </style>
+</head>
+<body><main>
+<section>
+  <h1>Blookd API — Current State & Microservices Prerequisites</h1>
+  <p class="muted">Facts as of 8 November 2026 · Integrated development snapshot, not a production certification</p>
+  <div class="grid">
+    <div class="metric"><strong>474</strong><span>HTTP routes</span></div>
+    <div class="metric"><strong>137 + 4</strong><span>tables + views</span></div>
+    <div class="metric"><strong>64/64</strong><span>new security unit tests</span></div>
+    <div class="metric"><strong>31×</strong><span>faster historical API suite</span></div>
+  </div>
+  <p><span class="tag ok">DONE</span> The integration includes 159 dev commits, M-24 and M-25. CI now runs type checking, unit tests and four API shards. API setup time dropped from 1h54m to 3m39s historically; CI API time is about 3m. New owner/SQL guards and the lost-update wallet fix are present.</p>
+  <p><span class="tag warn">VERIFIED WITH LIMITS</span> Type checking passes. Full unit: 3,682/3,936 passed. Full API: 1,252/1,291 passed. Remaining failures are known or reproduced on clean dev; three integration-specific OTP regressions were fixed and focused OTP tests are 49/50.</p>
+  <p><span class="tag bad">NOT READY FOR MICROSERVICES</span> The system is still one Node/Express application on one EC2 with one MySQL database, legacy v1 and in-process cron. Production RPS, SLA and current production schema are unknown.</p>
+  <h2>Mandatory work before splitting</h2>
+  <ol>
+    <li><strong>Security blockers:</strong> stop storing CVV, finish SQL parameterization, hash legacy passwords, restrict legacy money transfers, remove DOTENV_KEY from images and remediate 9 critical / 42 high dependency findings.</li>
+    <li><strong>Reproducible schema:</strong> capture the production baseline, align models and migrations (including ProductPurchase.booking_id), and stop building API-test schemas through sequelize.sync().</li>
+    <li><strong>Access and runtime safety:</strong> explicit public-route list, owner/RBAC checks, rate limiting, safe error responses, redacted logs and a real database health check.</li>
+    <li><strong>Data ownership:</strong> assign every table an owner, remove service-index cycles and route business writes through domain services. Shared booking, payment, identity and wallet tables require explicit compatibility contracts.</li>
+    <li><strong>Consistency:</strong> add outbox/idempotency for bookings, payments and notifications; saga/reconciliation for cancellation fees and Stripe; distributed locks for cron.</li>
+    <li><strong>Operations:</strong> run compiled JS, validate environment on startup, make CI automatic and required, and collect RPS, latency, DB and live-v1 metrics before choosing extraction candidates.</li>
+  </ol>
+  <div class="callout"><strong>Recommended sequence:</strong> security and schema first, then data boundaries and runtime readiness. Only after these gates should low-coupling workers (reports/notifications) be considered; booking and payment cores must remain in the modular monolith for now.</div>
+</section>
+<section class="pagebreak" lang="ru">
+  <h1>Blookd API — Текущее состояние и условия перехода к микросервисам</h1>
+  <p class="muted">Факты на 8 ноября 2026 · Интегрированный dev-снимок, а не подтверждение production</p>
+  <div class="grid">
+    <div class="metric"><strong>474</strong><span>HTTP-маршрута</span></div>
+    <div class="metric"><strong>137 + 4</strong><span>таблицы + представления</span></div>
+    <div class="metric"><strong>64/64</strong><span>новых security unit-тестов</span></div>
+    <div class="metric"><strong>31×</strong><span>историческое ускорение API</span></div>
+  </div>
+  <p><span class="tag ok">СДЕЛАНО</span> Интегрированы 159 коммитов dev, M-24 и M-25. CI проверяет типы, unit и четыре API-shard. Историческое время полного API-набора сократилось с 1 ч 54 мин до 3 мин 39 с, время API в CI — около 3 мин. Исправлены owner/SQL guards и lost update кошелька.</p>
+  <p><span class="tag warn">ПРОВЕРЕНО С ОГОВОРКАМИ</span> Типы проходят. Unit: 3682/3936. API: 1252/1291. Остальные падения известны или воспроизводятся на чистом dev; три регрессии OTP исправлены, focused OTP — 49/50.</p>
+  <p><span class="tag bad">К МИКРОСЕРВИСАМ НЕ ГОТОВЫ</span> По-прежнему один Node/Express на одном EC2 и одна MySQL-БД, legacy v1 и cron внутри API. Фактические RPS, SLA и production-схема неизвестны.</p>
+  <h2>Обязательные работы до разбиения</h2>
+  <ol>
+    <li><strong>Безопасность:</strong> прекратить хранение CVV, завершить параметризацию SQL, хешировать legacy-пароли, ограничить legacy-переводы, убрать DOTENV_KEY из образов, устранить 9 critical и 42 high зависимостей.</li>
+    <li><strong>Воспроизводимая схема:</strong> зафиксировать production baseline, синхронизировать модели и миграции (включая ProductPurchase.booking_id), убрать sequelize.sync() из API-тестов.</li>
+    <li><strong>Доступ и эксплуатация:</strong> явный список публичных маршрутов, owner/RBAC, rate limiting, безопасные ошибки и логи, health check БД.</li>
+    <li><strong>Владение данными:</strong> назначить владельца каждой таблицы, убрать циклы service-index, направить бизнес-записи через доменные сервисы. Для общих таблиц записей, платежей, пользователей и кошелька нужны контракты совместимости.</li>
+    <li><strong>Консистентность:</strong> outbox/idempotency для записей, платежей и уведомлений; saga/reconciliation для cancellation и Stripe; распределённые блокировки cron.</li>
+    <li><strong>Эксплуатация:</strong> запуск собранного JS, проверка env при старте, автоматический обязательный CI, замеры RPS, задержек, БД и живых v1-вызовов до выбора кандидатов на вынос.</li>
+  </ol>
+  <div class="callout"><strong>Рекомендуемая последовательность:</strong> сначала безопасность и схема, затем границы данных и эксплуатационная готовность. Только после этого рассматривать вынос слабосвязанных workers (отчёты/уведомления); ядро записей и платежей пока оставить в модульном монолите.</div>
+</section>
+</main></body></html>
