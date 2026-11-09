@@ -3,56 +3,86 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Blookd API — Status and Microservices Readiness</title>
+  <title>Blookd service — progress and next steps</title>
   <style>
-    :root{--ink:#172033;--muted:#5d687b;--line:#dce2ec;--accent:#3157c8;--ok:#14734b;--warn:#9a5b00;--bad:#b42332}*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:var(--ink);font:14px/1.42 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}main{width:min(1050px,calc(100% - 30px));margin:20px auto}section{background:#fff;border:1px solid var(--line);border-radius:11px;padding:17px 20px;margin-bottom:12px}h1{font-size:24px;margin:0 0 5px}h2{font-size:18px;margin:0 0 8px}h3{font-size:15px;margin:10px 0 5px}p,ul{margin:5px 0}ul{padding-left:20px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:9px 0}.metric{border:1px solid var(--line);border-radius:7px;padding:8px}.metric strong{display:block;font-size:19px}.metric span{font-size:10px;color:var(--muted)}.tag{display:inline-block;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700}.ok{color:var(--ok);background:#e8f6ef}.warn{color:var(--warn);background:#fff4db}.bad{color:var(--bad);background:#ffeaed}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.callout{border-left:3px solid var(--accent);background:#f3f6ff;padding:8px 10px;margin:8px 0}.pagebreak{break-before:page}@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}@media print{body{background:#fff}main{width:100%;margin:0}section{border:0;border-radius:0;padding:10px 14px;margin-bottom:4px}.pagebreak{break-before:page}}
+    :root{--ink:#172033;--muted:#5d687b;--line:#dce2ec;--accent:#3157c8;--ok:#14734b;--warn:#9a5b00;--bad:#b42332}*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}main{width:min(1120px,calc(100% - 30px));margin:20px auto}section{background:#fff;border:1px solid var(--line);border-radius:11px;padding:17px 20px;margin-bottom:12px}h1{font-size:24px;margin:0 0 5px}h2{font-size:18px;margin:12px 0 7px}h3{font-size:15px;margin:10px 0 5px}p,ul,ol{margin:6px 0}ul,ol{padding-left:21px}li{margin:4px 0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:9px 0}.metric{border:1px solid var(--line);border-radius:7px;padding:8px}.metric strong{display:block;font-size:19px}.metric span{font-size:10px;color:var(--muted)}.tag{display:inline-block;border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700}.ok{color:var(--ok);background:#e8f6ef}.warn{color:var(--warn);background:#fff4db}.bad{color:var(--bad);background:#ffeaed}.callout{border-left:3px solid var(--accent);background:#f3f6ff;padding:8px 10px;margin:8px 0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:8px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:7px}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.03em}.pagebreak{break-before:page}@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}}@media print{body{background:#fff}main{width:100%;margin:0}section{border:0;border-radius:0;padding:10px 14px;margin-bottom:4px}.pagebreak{break-before:page}}
   </style>
 </head>
 <body><main>
 <section>
-  <h1>Blookd API — Current State & Microservices Prerequisites</h1>
-  <p class="muted">Facts as of 8 November 2026 · Integrated development snapshot, not a production certification</p>
+  <h1>Blookd service: progress and what must happen before splitting</h1>
+  <p class="muted">Plain-language report for project management · Development snapshot of 8 November 2026, not a production approval</p>
   <div class="grid">
-    <div class="metric"><strong>474</strong><span>HTTP routes</span></div>
-    <div class="metric"><strong>137 + 4</strong><span>tables + views</span></div>
-    <div class="metric"><strong>64/64</strong><span>new security unit tests</span></div>
-    <div class="metric"><strong>31×</strong><span>faster historical API suite</span></div>
+    <div class="metric"><strong>474</strong><span>ways to call the service</span></div>
+    <div class="metric"><strong>137 + 4</strong><span>data tables and views</span></div>
+    <div class="metric"><strong>64/64</strong><span>new security checks pass</span></div>
+    <div class="metric"><strong>31×</strong><span>faster full service test run</span></div>
   </div>
-  <p><span class="tag ok">DONE</span> The integration includes 159 dev commits, M-24 and M-25. CI now runs type checking, unit tests and four API shards. API setup time dropped from 1h54m to 3m39s historically; CI API time is about 3m. New owner/SQL guards and the lost-update wallet fix are present.</p>
-  <p><span class="tag warn">VERIFIED WITH LIMITS</span> Type checking passes. Full unit: 3,682/3,936 passed. Full API: 1,252/1,291 passed. Remaining failures are known or reproduced on clean dev; three integration-specific OTP regressions were fixed and focused OTP tests are 49/50.</p>
-  <p><span class="tag bad">NOT READY FOR MICROSERVICES</span> The system is still one Node/Express application on one EC2 with one MySQL database, legacy v1 and in-process cron. Production RPS, SLA and current production schema are unknown.</p>
-  <h2>Mandatory work before splitting</h2>
+  <p><span class="tag ok">COMPLETED</span> We combined 159 development changes. Professionals can now change only their own payment accounts, payment history and images. Password reset requires a recent one-time code and works only once. Wallet updates no longer overwrite each other during simultaneous requests. The one-time sign-in token is returned correctly again.</p>
+  <p><span class="tag warn">CHECKED, NOT FULLY GREEN</span> Code type checks pass. Full developer checks: 3,682 of 3,936 pass. Full service checks: 1,252 of 1,291 pass. The remaining failures also exist on the unmodified development code. Three sign-in problems introduced during the merge were fixed; the focused sign-in checks pass 49 of 50.</p>
+  <h2>Before → now: facts from the commits</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Area</th><th>Before</th><th>Now</th><th>Meaning</th></tr>
+    <tr><td>Release checks</td><td>No automated checks in the release workflow</td><td>Type checks and four groups of service tests exist, but start only on demand</td><td>Large improvement; still not a mandatory merge gate</td></tr>
+    <tr><td>Test duration</td><td>1 hour 54 minutes</td><td>3 minutes 39 seconds historically; about 3 minutes in the release environment</td><td>Checks are practical to run often</td></tr>
+    <tr><td>Test coverage size</td><td>484 service checks</td><td>1,291 service checks and 3,936 developer checks</td><td>Much broader safety net, but not every check passes</td></tr>
+    <tr><td>Service surface</td><td>273 ways to call the service</td><td>474 ways, including administration and image try-on</td><td>The product grew significantly; splitting by technology would be risky</td></tr>
+    <tr><td>Data structure</td><td>119 tables in the old database copy</td><td>137 tables and 4 views known from the copy and change files</td><td>More shared data and more coordination required</td></tr>
+    <tr><td>Account protection</td><td>Other people’s payment accounts and images could be changed</td><td>Ownership is checked; one-time password reset is single-use</td><td>Specific confirmed holes are closed</td></tr>
+    <tr><td>Database input</td><td>Several unsafe input paths and one wallet race</td><td>Those paths are parameterized and wallet updates are atomic</td><td>Targeted risks fixed; older unsafe paths remain elsewhere</td></tr>
+    <tr><td>Card data and passwords</td><td>Earlier cleanup was expected</td><td>Raw card details are accepted again and card security codes are stored; old passwords remain reversibly encrypted</td><td>Must be fixed before any architectural expansion</td></tr>
+    <tr><td>Database baseline</td><td>No reliable way to recreate the production structure</td><td>Still missing; the development copy is outdated, and one purchase field exists only in code</td><td>Production structure must be captured and verified first</td></tr>
+    <tr><td>Third-party packages</td><td>Known security findings</td><td>99 findings: 9 critical and 42 high</td><td>Maintenance work is still required</td></tr>
+    <tr><td>Runtime</td><td>One cloud server, one database, background jobs inside the service</td><td>No change</td><td>Do not add more independently deployed parts yet</td></tr>
+    <tr><td>Background work</td><td>Jobs can overlap across instances</td><td>No universal lock or reliable event journal</td><td>Must be made safe before scaling out</td></tr>
+  </table></div>
+  <h2>Required before splitting the service</h2>
   <ol>
-    <li><strong>Security blockers:</strong> stop storing CVV, finish SQL parameterization, hash legacy passwords, restrict legacy money transfers, remove DOTENV_KEY from images and remediate 9 critical / 42 high dependency findings.</li>
-    <li><strong>Reproducible schema:</strong> capture the production baseline, align models and migrations (including ProductPurchase.booking_id), and stop building API-test schemas through sequelize.sync().</li>
-    <li><strong>Access and runtime safety:</strong> explicit public-route list, owner/RBAC checks, rate limiting, safe error responses, redacted logs and a real database health check.</li>
-    <li><strong>Data ownership:</strong> assign every table an owner, remove service-index cycles and route business writes through domain services. Shared booking, payment, identity and wallet tables require explicit compatibility contracts.</li>
-    <li><strong>Consistency:</strong> add outbox/idempotency for bookings, payments and notifications; saga/reconciliation for cancellation fees and Stripe; distributed locks for cron.</li>
-    <li><strong>Operations:</strong> run compiled JS, validate environment on startup, make CI automatic and required, and collect RPS, latency, DB and live-v1 metrics before choosing extraction candidates.</li>
+    <li><strong>Protect people and money:</strong> stop storing card security codes, finish safe database input handling, hash old passwords, restrict legacy transfers and remove the decryption key from application packages.</li>
+    <li><strong>Make the database reproducible:</strong> capture the real production structure, align code and change files, and test against that structure rather than a structure invented from code models.</li>
+    <li><strong>Make access and failures safe:</strong> explicit public-page list, owner checks, request limits, no internal details in errors or logs, and a health check that really tests the database.</li>
+    <li><strong>Assign data ownership:</strong> every table needs one responsible domain. Booking, payment, identity and wallet data must keep working through clear compatibility contracts, not direct writes from unrelated modules.</li>
+    <li><strong>Make background work reliable:</strong> record events safely, prevent duplicate processing, add recovery steps for payment cancellation and lock jobs across servers.</li>
+    <li><strong>Measure and gate releases:</strong> run the service from prepared code, validate configuration at startup, make checks automatic and required, and measure request rate, response time and live old-version calls.</li>
   </ol>
-  <div class="callout"><strong>Recommended sequence:</strong> security and schema first, then data boundaries and runtime readiness. Only after these gates should low-coupling workers (reports/notifications) be considered; booking and payment cores must remain in the modular monolith for now.</div>
+  <div class="callout"><strong>Recommended order:</strong> safety and database structure first, then ownership and reliable background work. Only after that should low-dependency jobs such as reports and notifications be moved out. Booking and payment cores should stay in one well-structured application for now.</div>
 </section>
 <section class="pagebreak" lang="ru">
-  <h1>Blookd API — Текущее состояние и условия перехода к микросервисам</h1>
-  <p class="muted">Факты на 8 ноября 2026 · Интегрированный dev-снимок, а не подтверждение production</p>
+  <h1>Сервис Blookd: что изменилось и что нужно сделать до разделения</h1>
+  <p class="muted">Отчёт для проект-менеджера простым языком · Снимок разработки на 8 ноября 2026, а не подтверждение production</p>
   <div class="grid">
-    <div class="metric"><strong>474</strong><span>HTTP-маршрута</span></div>
-    <div class="metric"><strong>137 + 4</strong><span>таблицы + представления</span></div>
-    <div class="metric"><strong>64/64</strong><span>новых security unit-тестов</span></div>
-    <div class="metric"><strong>31×</strong><span>историческое ускорение API</span></div>
+    <div class="metric"><strong>474</strong><span>способа обратиться к сервису</span></div>
+    <div class="metric"><strong>137 + 4</strong><span>таблицы и представления данных</span></div>
+    <div class="metric"><strong>64/64</strong><span>новых проверок безопасности</span></div>
+    <div class="metric"><strong>31×</strong><span>ускорение полной проверки сервиса</span></div>
   </div>
-  <p><span class="tag ok">СДЕЛАНО</span> Интегрированы 159 коммитов dev, M-24 и M-25. CI проверяет типы, unit и четыре API-shard. Историческое время полного API-набора сократилось с 1 ч 54 мин до 3 мин 39 с, время API в CI — около 3 мин. Исправлены owner/SQL guards и lost update кошелька.</p>
-  <p><span class="tag warn">ПРОВЕРЕНО С ОГОВОРКАМИ</span> Типы проходят. Unit: 3682/3936. API: 1252/1291. Остальные падения известны или воспроизводятся на чистом dev; три регрессии OTP исправлены, focused OTP — 49/50.</p>
-  <p><span class="tag bad">К МИКРОСЕРВИСАМ НЕ ГОТОВЫ</span> По-прежнему один Node/Express на одном EC2 и одна MySQL-БД, legacy v1 и cron внутри API. Фактические RPS, SLA и production-схема неизвестны.</p>
-  <h2>Обязательные работы до разбиения</h2>
+  <p><span class="tag ok">СДЕЛАНО</span> Объединены 159 изменений разработки. Мастер теперь может менять только свои платёжные аккаунты, историю платежей и изображения. Сброс пароля требует недавний одноразовый код и срабатывает только один раз. Одновременные операции с кошельком больше не затирают друг друга. Одноразовый токен входа снова возвращается корректно.</p>
+  <p><span class="tag warn">ПРОВЕРЕНО, НО НЕ ВСЁ ЗЕЛЁНОЕ</span> Проверка типов проходит. Проверки разработчика: 3682 из 3936 успешны. Проверки сервиса: 1252 из 1291 успешны. Остальные падения повторяются и на исходном коде разработки. Три ошибки входа, возникшие при объединении, исправлены; точечные проверки входа проходят 49 из 50.</p>
+  <h2>Было → стало: факты из коммитов</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Область</th><th>Было</th><th>Стало</th><th>Что это значит</th></tr>
+    <tr><td>Проверки перед выпуском</td><td>Автоматических проверок не было</td><td>Есть проверка типов и четыре группы проверок сервиса, но запуск только по запросу</td><td>Большой прогресс, но обязательного барьера для слияния ещё нет</td></tr>
+    <tr><td>Время проверок</td><td>1 час 54 минуты</td><td>3 минуты 39 секунд исторически; около 3 минут в среде выпуска</td><td>Проверять изменения можно часто</td></tr>
+    <tr><td>Объём проверок</td><td>484 проверки сервиса</td><td>1291 проверка сервиса и 3936 проверок разработчика</td><td>Защита шире, но не все проверки проходят</td></tr>
+    <tr><td>Возможности сервиса</td><td>273 способа обращения</td><td>474, включая администрирование и примерку изображений</td><td>Продукт сильно вырос; разделять его по технологическим признакам рискованно</td></tr>
+    <tr><td>Структура данных</td><td>119 таблиц в старой копии БД</td><td>137 таблиц и 4 представления по копии и файлам изменений</td><td>Общих данных больше, согласование сложнее</td></tr>
+    <tr><td>Защита аккаунтов</td><td>Можно было менять чужие платёжные аккаунты и изображения</td><td>Есть проверка владельца; сброс пароля одноразовый</td><td>Конкретные подтверждённые дыры закрыты</td></tr>
+    <tr><td>Ввод в базу данных</td><td>Опасные пути ввода и гонка кошелька</td><td>Эти пути параметризованы, обновление кошелька атомарно</td><td>Конкретные риски закрыты, но старые небезопасные места остались</td></tr>
+    <tr><td>Карты и пароли</td><td>Ожидалась очистка</td><td>Сырые данные карт снова принимаются, коды CVV хранятся; старые пароли можно расшифровать</td><td>Исправить обязательно до расширения архитектуры</td></tr>
+    <tr><td>Копия production БД</td><td>Нет надёжного способа восстановить структуру</td><td>Копия dev устарела; одно поле покупки есть в коде, но отсутствует в БД</td><td>Сначала снять и проверить реальную структуру production</td></tr>
+    <tr><td>Сторонние пакеты</td><td>Известные уязвимости</td><td>99: 9 критических и 42 высоких</td><td>Требуется плановое обновление</td></tr>
+    <tr><td>Работа сервиса</td><td>Один облачный сервер, одна БД, фоновые задачи внутри</td><td>Без изменений</td><td>Добавлять независимые части пока рано</td></tr>
+    <tr><td>Фоновые задачи</td><td>Задачи могут пересекаться между серверами</td><td>Нет общей блокировки и надёжного журнала событий</td><td>Нужно сделать безопасно перед масштабированием</td></tr>
+  </table></div>
+  <h2>Обязательно до разделения сервиса</h2>
   <ol>
-    <li><strong>Безопасность:</strong> прекратить хранение CVV, завершить параметризацию SQL, хешировать legacy-пароли, ограничить legacy-переводы, убрать DOTENV_KEY из образов, устранить 9 critical и 42 high зависимостей.</li>
-    <li><strong>Воспроизводимая схема:</strong> зафиксировать production baseline, синхронизировать модели и миграции (включая ProductPurchase.booking_id), убрать sequelize.sync() из API-тестов.</li>
-    <li><strong>Доступ и эксплуатация:</strong> явный список публичных маршрутов, owner/RBAC, rate limiting, безопасные ошибки и логи, health check БД.</li>
-    <li><strong>Владение данными:</strong> назначить владельца каждой таблицы, убрать циклы service-index, направить бизнес-записи через доменные сервисы. Для общих таблиц записей, платежей, пользователей и кошелька нужны контракты совместимости.</li>
-    <li><strong>Консистентность:</strong> outbox/idempotency для записей, платежей и уведомлений; saga/reconciliation для cancellation и Stripe; распределённые блокировки cron.</li>
-    <li><strong>Эксплуатация:</strong> запуск собранного JS, проверка env при старте, автоматический обязательный CI, замеры RPS, задержек, БД и живых v1-вызовов до выбора кандидатов на вынос.</li>
+    <li><strong>Защитить людей и деньги:</strong> прекратить хранение CVV, безопасно обрабатывать ввод в БД, хешировать старые пароли, ограничить старые переводы, убрать ключ расшифровки из пакета приложения.</li>
+    <li><strong>Сделать БД воспроизводимой:</strong> снять реальную структуру production, привести код и файлы изменений к ней, тестировать на ней, а не на структуре, созданной из моделей кода.</li>
+    <li><strong>Сделать доступ и ошибки безопасными:</strong> явный список публичных страниц, проверка владельца, ограничение числа запросов, никаких внутренних деталей в ошибках и логах, настоящая проверка БД.</li>
+    <li><strong>Назначить владельцев данных:</strong> у каждой таблицы должен быть один ответственный домен. Записи, платежи, пользователи и кошелёк должны работать через понятные контракты, а не через записи из разных модулей напрямую.</li>
+    <li><strong>Сделать фоновую работу надёжной:</strong> безопасный журнал событий, защита от дублей, восстановление после ошибок отмены платежа и блокировка задач между серверами.</li>
+    <li><strong>Измерить и закрепить процесс:</strong> запуск подготовленного кода, проверка настроек при старте, автоматические обязательные проверки, измерение числа запросов, времени ответа и использования старой версии.</li>
   </ol>
-  <div class="callout"><strong>Рекомендуемая последовательность:</strong> сначала безопасность и схема, затем границы данных и эксплуатационная готовность. Только после этого рассматривать вынос слабосвязанных workers (отчёты/уведомления); ядро записей и платежей пока оставить в модульном монолите.</div>
+  <div class="callout"><strong>Рекомендуемый порядок:</strong> сначала безопасность и структура БД, затем владельцы данных и надёжный фоновый процесс. Только после этого выносить слабосвязанные задачи — отчёты и уведомления. Ядро записей и платежей пока оставить в одном хорошо структурированном приложении.</div>
 </section>
 </main></body></html>
